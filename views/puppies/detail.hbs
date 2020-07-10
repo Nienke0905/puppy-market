@@ -1,0 +1,101 @@
+<div class="container my-2">
+    <div class="row justify-content-center my-3">
+        <div class="col-sm-8 col-md-6 col-lg-4">
+            <h1>{{ puppy.name }}</h1>
+        </div>
+    </div>
+
+    <div class="row justify-content-center my-3">
+        <div class="col-sm-8 col-md-6 col-lg-4">
+            <p>Breeds:</p>
+            <ul>
+                {{#each puppy.breed }}
+                    <li>{{this}}</li>
+                {{/each}}
+            </ul>
+            <p>Gender: {{ puppy.gender }}</p>
+            <p>Birthday: {{ puppy.birthDate }}</p>
+            <p>Colors:</p>
+            <ul>
+                {{#each puppy.colors }}
+                    <li>{{ this }}</li>
+                {{/each}}
+            </ul>
+            <p>Price: {{ puppy.price }}€</p>
+            <p>Description: {{ puppy.description }}</p>
+            <p>Owner: <a href="/users/profile?id={{puppy.owner._id}}" class="ref-link">{{ puppy.owner.username }}</a></p>
+        </div>
+        <div class="col-sm-8 col-md-6 col-lg-4">
+            <img class="main-pic" src="{{ puppy.mainPicturePath }}" alt="">
+            {{#if isOwner}}
+                <p><a href="/puppies/update/{{puppy._id}}" class="btn btn-secondary button m-1">Update Puppy</a>
+                <a href="/puppies/delete/{{puppy._id}}" class="btn btn-secondary button m-1">Delete Puppy</a></p>
+            {{/if}}
+        </div>
+    </div>
+    {{#if morePictures}}
+        <div class="row justify-content-center my-3">
+            <h4>Additional Pictures</h4>
+        </div>
+
+        <div class="row">
+            {{#each puppy.picturesPath}}
+                <div class="col-sm-8 col-md-6 col-lg-4 p-2 d-flex justify-content-center">
+                    <div class="card" style="width: 22rem">
+                        <img src="{{ this }}" alt="" class="card-img-top" >
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    {{/if}}
+
+
+    <div class="row justify-content-center my-3">
+        <h4>Comments</h4>
+    </div>
+
+    <div class="row">
+        {{#each comments}}
+            <div class="col-10 p-2"> 
+
+                <div class="update-comments">
+                    <div class="comments">
+                        <p class="comments-content">{{this.content}}</p>
+                        <a href="/users/profile?id={{this.author._id}}" class="ref-link author">{{this.author.username}}</a>
+                        {{#if this.isAuthor}}
+                            <button class="update-comments-btn btn btn-secondary button" class="update-comments-btn" type="submit">Update comments</button>
+                            <a class="btn btn-secondary button" href="/puppies/{{../puppy._id}}/comments/delete/{{this.id}}">Delete commments</a>
+                        {{/if}}
+                    </div>
+                
+                    <form class="update-comments-form" style="display: none;">
+                        <input class="update-comments-content" type="text" value="{{this.content}}" name="content" placeholder="Your comment" >
+                        <input class="comments-id" type="text" hidden value="{{this.id}}" name="id">
+                        <button class="confirm-update-comments-btn" type="submit">Edit comment</button>            
+                    </form>
+                </div>
+            </div>
+        {{/each}}
+        <input class="puppy-id"  type="text" hidden value="{{puppy.id}}" name="puppyId">
+    </div>
+
+    <div class="row justify-content-center my-3">
+        <h4>Add your comment</h4>
+    </div>
+
+    <div class="row d-flex justify-content-center my-3">
+        <div class="col-sm-8 col-md-6">           
+            <form action="/puppies/comments/create" method="POST">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="content" name="content" placeholder="Your comment" >
+                </div>
+                <button type="submit" class="btn btn-secondary">Comment</button>
+                <input type="text" hidden value="{{puppy.id}}" name="id">
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="/javascripts/update-comments.js"></script>
+            

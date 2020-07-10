@@ -1,0 +1,79 @@
+<div class="container">
+    <div class="row justify-content-center my-3">
+        <div class="col-sm-8 col-md-6 col-lg-6">
+            <h4>{{user.username}}</h4>
+            <p>Name: {{user.name}}</p>
+            <p>Email: {{user.email}}</p>
+            <p>City: {{user.city}}</p>
+            {{#if isOwner}}
+                <p><a href="/users/updateUser?id={{user._id}}" class="btn btn-secondary button">Update profile</a></p>
+            {{/if}}
+        </div>
+        <div class="col-sm-8 col-md-6 col-lg-6">
+            <img class="main-pic" src="{{user.profileImagePath}}" alt="{{user.username}} img">
+        </div>
+    </div>
+    {{#if isSeller}}
+    <div class="row justify-content-center my-3">
+        <h4>Puppies by owner</h4>
+    </div>
+    <div class="row">
+    {{#each puppies}}
+        <div class="col-sm-8 col-md-6 col-lg-4 p-2 d-flex justify-content-center">
+            <div class="card" style="width: 22rem">
+                <a class="puppy-title" href="/puppies/detail/{{this._id}}">
+                <h5 class="card-title p-2">{{this.name}}</h5>
+                <img src="{{ this.mainPicturePath }}" class="card-img-top" alt="...">
+                </a>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+    {{/if}}
+    <div class="row justify-content-center my-3">
+        <h4>Reviews</h4>
+    </div>
+    <div class="row justify-content-center">
+        {{#each reviews}}
+            <div class="col-8 p-2"> 
+                <p class="comment">{{this.review}}</p>
+                <p>Reviewer: <span><a href="/users/profile?id={{this.reviewer.id}}" class="ref-link">{{this.reviewer.username}} </a></span><span class="score">Score: {{this.score}}</span></p>
+            </div>
+        {{/each}}
+    </div>
+    {{#if visitor}}
+    <form action="/reviews/createReview?profile_id={{user._id}}" method="post">
+
+        <div class="row justify-content-center my-3">
+            <div class="col-8 p-2"> 
+                <label for="">Review:</label>
+                <textarea type="text" class="form-control" name="review" required></textarea>
+            </div>
+        </div> 
+
+        <div class="row justify-content-center my-3">
+            <div class="col-8 p-2 range-wrap">
+             
+                <label for="">Score:</label>
+                <input type="range" name="score" class="form-control-range range" min="1" max="10"required>
+                <output class="bubble"></output>
+
+            </div>
+        </div>
+
+        <div class="row justify-content-center my-4">
+            <div class="col-8 p-2">
+                <input type="submit" value="Submit" class="button p-2"></input>
+            </div>
+        </div>
+    </form>
+    {{/if}}
+
+    {{#if errorMessage}}
+        <p class="error">{{errorMessage}}</p>
+    {{/if}}
+
+</div>
+
+
+<script src="/javascripts/bubble.js"></script>
